@@ -2,13 +2,13 @@ name: CI build
 
 on:
   schedule:
-  - cron:  '12 6 * * *'
+  - cron:  '25 19 * * *'
 #~ on:
   push:
     branches:
       - master
     paths-ignore:
-      - 'data.chennai.csv'
+      - 'data.bengaluru.csv'
   #~ pull_request:
   
 
@@ -36,10 +36,10 @@ jobs:
         pip install -r requirements.txt
     #~ - name: Setup upterm session
       #~ uses: lhotari/action-upterm@v1
-    - name: Scrape Chennai beds data
+    - name: Scrape Bengaluru beds data
       run: |
         python scraper.py
-    - name: Commit modified data.chennai.csv
+    - name: Commit modified data.bengaluru.csv
       run: |
         git config --global user.name 'Your Name'
         git config --global user.email 'your-username@users.noreply.github.com'
