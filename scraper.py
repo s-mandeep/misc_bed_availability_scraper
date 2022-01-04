@@ -30,6 +30,7 @@ if __name__=='__main__':
       WebDriverWait(driver, 20).until(EC.frame_to_be_available_and_switch_to_it((By.TAG_NAME,"iframe")))
       parent = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.TAG_NAME,'body')))
       # parent = driver.find_element(By.TAG_NAME,'body')
+      print("HERE!!#@@##$!#$")
       # print(parent.get_attribute('innerHTML'))
       v = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CLASS_NAME,'visualContainerHost')))
       # v = parent.find_element(By.CLASS_NAME,'visualContainerHost')
