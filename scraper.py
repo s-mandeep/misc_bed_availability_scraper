@@ -28,11 +28,13 @@ if __name__=='__main__':
       driver.get('https://apps.bbmpgov.in/Covid19/en/bedstatus.php')
       time.sleep(30)
       WebDriverWait(driver, 20).until(EC.frame_to_be_available_and_switch_to_it((By.TAG_NAME,"iframe")))
-
-      parent = driver.find_element(By.TAG_NAME,'body')
+      parent = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.TAG_NAME,'body')))
+      # parent = driver.find_element(By.TAG_NAME,'body')
       # print(parent.get_attribute('innerHTML'))
-      v = parent.find_element(By.CLASS_NAME,'visualContainerHost')
-      v =  v.find_elements(By.CLASS_NAME,'multiRowCard')
+      v = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CLASS_NAME,'visualContainerHost')))
+      # v = parent.find_element(By.CLASS_NAME,'visualContainerHost')
+      v = WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located((By.CLASS_NAME,'multiRowCard')))
+      # v =  v.find_elements(By.CLASS_NAME,'multiRowCard')
       results = []
       for e in v:
         cards = e.find_elements(By.CLASS_NAME,'card')
