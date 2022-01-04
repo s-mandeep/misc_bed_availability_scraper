@@ -2,14 +2,7 @@ name: CI build
 
 on:
   schedule:
-  - cron:  '10 14 * * *'
-#~ on:
-  push:
-    branches:
-      - master
-    paths-ignore:
-      - 'data.bengaluru.csv'
-  #~ pull_request:
+  - cron:  '15 14 * * *'
   
 
 jobs:
@@ -41,6 +34,7 @@ jobs:
         python scraper.py
     - name: Commit modified data.bengaluru.csv
       run: |
+        git add .
         git config --global user.name 'Your Name'
         git config --global user.email 'your-username@users.noreply.github.com'
         git commit -am "Automated report"
