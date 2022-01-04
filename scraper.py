@@ -14,7 +14,7 @@ if __name__=='__main__':
   date=datetime.datetime.now();date_str=date.strftime('%Y-%m-%d')
   
   # ~ for city in ['gbn']:
-  for city in ['hp','mp','chennai','pune','delhi','gbn']:
+  for city in ['bengaluru','hp','mp','chennai','pune','delhi','gbn']:
     if city=='bengaluru':
       #BENGALURU
       options=webdriver.ChromeOptions();
