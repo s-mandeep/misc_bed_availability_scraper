@@ -5,7 +5,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import ActionChains
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service
 
 
 import os,requests,time,bs4,datetime,csv;
@@ -27,8 +26,7 @@ if __name__=='__main__':
       options.add_argument("--window-size=1366,768")
       options.add_experimental_option("excludeSwitches", ["enable-automation"])
       options.add_experimental_option('useAutomationExtension', False)
-      chrome_service = Service(ChromeDriverManager().install())
-      driver=webdriver.Chrome(service=chrome_service,options=options) 
+      driver=webdriver.Chrome(ChromeDriverManager().install(),options=options) 
       driver.get('https://www.powerbi.com/view?r=eyJrIjoiOTcyM2JkNTQtYzA5ZS00MWI4LWIxN2UtZjY1NjFhYmFjZDBjIiwidCI6ImQ1ZmE3M2I0LTE1MzgtNGRjZi1hZGIwLTA3NGEzNzg4MmRkNiJ9')
       time.sleep(30)
       print(driver.page_source)
