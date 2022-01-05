@@ -1,13 +1,15 @@
-from selenium import webdriver;
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import ActionChains
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
+from bs4 import BeautifulSoup
 
+from tabula import read_pdf
+from tabulate import tabulate
 
-import os,requests,time,bs4,datetime,csv;
+import os,requests,time,datetime,csv;
 from PIL import Image
 import json
 
@@ -15,53 +17,48 @@ if __name__=='__main__':
   
   date=datetime.datetime.now();date_str=date.strftime('%Y-%m-%d')
   
-  # ~ for city in ['gbn']:
   for city in ['bengaluru','hp','mp','chennai','pune','delhi','gbn']:
     if city=='bengaluru':
       #BENGALURU
-      options=webdriver.ChromeOptions();
-      options.add_argument('--ignore-certificate-errors');
-      options.add_argument('--disable-gpu');
-      options.add_argument("--headless")
-      options.add_argument("--window-size=1366,768")
-      options.add_experimental_option("excludeSwitches", ["enable-automation"])
-      options.add_experimental_option('useAutomationExtension', False)
-      driver=webdriver.Chrome(ChromeDriverManager().install(),options=options) 
-      driver.get('https://www.powerbi.com/view?r=eyJrIjoiOTcyM2JkNTQtYzA5ZS00MWI4LWIxN2UtZjY1NjFhYmFjZDBjIiwidCI6ImQ1ZmE3M2I0LTE1MzgtNGRjZi1hZGIwLTA3NGEzNzg4MmRkNiJ9')
-      time.sleep(30)
-      print(driver.page_source)
-      # WebDriverWait(driver, 20).until(EC.frame_to_be_available_and_switch_to_it((By.TAG_NAME,"iframe")))
-      # print("---n---")
-      # print(driver.page_source)
-      parent = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.TAG_NAME,'body')))
-      # parent = driver.find_element(By.TAG_NAME,'body')
-      print("HERE!!#@@##$!#$")
-      
-      v = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CLASS_NAME,'visualContainerHost')))
-      # v = parent.find_element(By.CLASS_NAME,'visualContainerHost')
-      v = WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located((By.CLASS_NAME,'multiRowCard')))
-      # v =  v.find_elements(By.CLASS_NAME,'multiRowCard')
-      results = []
-      for e in v:
-        cards = e.find_elements(By.CLASS_NAME,'card')
-        for c in cards:
-          label = c.get_attribute('aria-label')
-          label = label.replace('.','')
-          res = [int(i) for i in label.split() if i.isdigit()]
-          results.append([res[1],res[3]])
 
+      url = "https://apps.bbmpgov.in/Covid19/en/mediabulletin.php"
+
+      response = requests.get(url)
+      soup = BeautifulSoup(response.text, 'html.parser')
+      links = soup.find_all('a')
+        
+      for link in links:
+          if ('.pdf' in link.get('href', [])):
+              print("Downloading pdf...")
+
+              l = "https://apps.bbmpgov.in/Covid19/en/"+link.get('href').replace(" ","%20")
+              print(l)
+              response = requests.get(l)
+              pdf = open("BLR_"+str(date_str)+".pdf", 'wb')
+              pdf.write(response.content)
+              pdf.close()
+              break
+  
+      # print(text)
+      tables = read_pdf("BLR_"+str(date_str)+".pdf", pages=12)
+      df=tables[0]
+      
+      results=[]
+      results.append(df.iloc[14][-2].split())
+      results.append(df.iloc[14][-1].split())
       print(results)
-      general_available = results[0][1]
+
+      general_available = results[1][0]
       general_admitted = results[0][0]
 
       hdu_available = results[1][1]
-      hdu_admitted = results[1][0]
+      hdu_admitted = results[0][1]
 
-      icu_available = results[2][1]
-      icu_admitted = results[2][0]
+      icu_available = results[1][2]
+      icu_admitted = results[0][2]
 
-      ventilator_available = results[3][1]
-      ventilator_admitted = results[3][0]
+      ventilator_available = results[1][3]
+      ventilator_admitted = results[0][3]
 
 
       a=open('data.bengaluru.csv');r=csv.reader(a);info=[i for i in r];a.close()
