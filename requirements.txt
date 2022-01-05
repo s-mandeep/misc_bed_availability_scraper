@@ -2,4 +2,4 @@ tqdm
 bs4
 requests
 pillow
-tabula
+tabula-py
