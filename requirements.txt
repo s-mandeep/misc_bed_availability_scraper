@@ -1,6 +1,5 @@
 tqdm
 bs4
-selenium
 requests
 pillow
-webdriver-manager
+tabula

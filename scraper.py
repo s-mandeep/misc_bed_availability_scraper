@@ -1,16 +1,7 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver import ActionChains
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
-
 from tabula import read_pdf
-from tabulate import tabulate
 
-import os,requests,time,datetime,csv;
-from PIL import Image
+import os,requests,datetime,csv;
 import json
 
 if __name__=='__main__':
@@ -162,7 +153,6 @@ if __name__=='__main__':
 
     elif city=='pune':
       x=os.popen('curl -k https://divcommpunecovid.com/ccsbeddashboard/hsr').read()
-      from bs4 import BeautifulSoup
       soup=BeautifulSoup(x,'html.parser');
       xx=soup('legend')[1].parent
       xx=xx('table')[0]
@@ -177,7 +167,6 @@ if __name__=='__main__':
       print(row)
     elif city=='hp':
       x=os.popen('curl -k https://covidcapacity.hp.gov.in/index.php').read()
-      from bs4 import BeautifulSoup
       soup=BeautifulSoup(x,'html.parser');
       xx=soup('a',attrs={'id':'oxygenbedmodel'})[0]
       tot_o2=int(xx.parent.parent('td')[0].text)
@@ -192,7 +181,6 @@ if __name__=='__main__':
       print(city+':');print(row)
     elif city=='mp':
       x=os.popen('curl -k http://sarthak.nhmmp.gov.in/covid/facility-bed-occupancy-dashboard/').read()
-      from bs4 import BeautifulSoup
       soup=BeautifulSoup(x,'html.parser');
       xx=soup('a',attrs={'href':'http://sarthak.nhmmp.gov.in/covid/facility-bed-occupancy-details'})
       tot_normal,occupied_normal,vacant_normal,tot_o2,occupied_o2,vacant_o2,tot_icu,occupied_icu,vacant_icu=[i.text for i in xx if i.text.isnumeric()]
